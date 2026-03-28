@@ -1,1 +1,1 @@
-This is 100 AI generated
+This is 100% AI generated
