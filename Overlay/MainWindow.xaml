@@ -250,49 +250,80 @@
                                         ShadowDepth="0" 
                                         Opacity="0.6"/>
                     </TextBlock.Effect>
-                    <TextBlock.ContextMenu>
-                        <ContextMenu x:Name="TimeContextMenu"
-                                     Background="#E5000000"
-                                     BorderThickness="1"
-                                     Padding="4"
-                                     StaysOpen="False"
-                                     Opened="TimeContextMenu_Opened">
-                            <ContextMenu.BorderBrush>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                    <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
-                                    <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
-                                </LinearGradientBrush>
-                            </ContextMenu.BorderBrush>
-                            <ContextMenu.Resources>
-                                <Style TargetType="MenuItem">
-                                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Padding" Value="12,6"/>
-                                    <Setter Property="FontWeight" Value="SemiBold"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsHighlighted" Value="True">
-                                            <Setter Property="Background">
-                                                <Setter.Value>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                        <GradientStop Color="{DynamicResource HighlightCyan}" Offset="0"/>
-                                                        <GradientStop Color="{DynamicResource HighlightPurple}" Offset="1"/>
-                                                    </LinearGradientBrush>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContextMenu.Resources>
-                            <MenuItem Header="5 Minuten" Click="SetTime_Click" Tag="5"/>
-                            <MenuItem Header="10 Minuten" Click="SetTime_Click" Tag="10"/>
-                            <MenuItem Header="15 Minuten" Click="SetTime_Click" Tag="15"/>
-                            <MenuItem Header="20 Minuten" Click="SetTime_Click" Tag="20"/>
-                            <MenuItem Header="30 Minuten" Click="SetTime_Click" Tag="30"/>
-                            <MenuItem Header="45 Minuten" Click="SetTime_Click" Tag="45"/>
-                            <MenuItem Header="60 Minuten" Click="SetTime_Click" Tag="60"/>
-                        </ContextMenu>
-                    </TextBlock.ContextMenu>
                 </TextBlock>
+
+                <!-- Time Input Popup -->
+                <Popup x:Name="TimeInputPopup"
+                       PlacementTarget="{Binding ElementName=CenterTimeText}"
+                       Placement="Bottom"
+                       StaysOpen="True"
+                       AllowsTransparency="True">
+                    <Border Background="#E5000000"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Padding="16">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
+                                <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Border.Effect>
+                            <DropShadowEffect Color="{DynamicResource PrimaryCyan}" 
+                                            BlurRadius="15" 
+                                            ShadowDepth="0" 
+                                            Opacity="0.5"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Zeit in Minuten:"
+                                      Foreground="#FFFFFF"
+                                      FontSize="12"
+                                      FontWeight="SemiBold"
+                                      Margin="0,0,0,8"/>
+                            <TextBox x:Name="TimeInputTextBox"
+                                     Width="120"
+                                     Height="32"
+                                     FontSize="16"
+                                     FontWeight="Bold"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     MaxLength="4"
+                                     KeyDown="TimeInputTextBox_KeyDown"
+                                     Loaded="TimeInputTextBox_Loaded">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="Background" Value="#33FFFFFF"/>
+                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                        <Setter Property="BorderThickness" Value="2"/>
+                                        <Setter Property="BorderBrush">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
+                                                    <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="CaretBrush" Value="#FFFFFF"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="TextBox">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="8">
+                                                        <ScrollViewer x:Name="PART_ContentHost"
+                                                                     Margin="8,0"
+                                                                     VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                </Popup>
             </Grid>
 
             <!-- Moderner Start/Pause Button -->

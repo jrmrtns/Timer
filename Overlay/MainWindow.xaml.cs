@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -99,17 +100,52 @@ public partial class MainWindow : Window
         if (!_isRunning)
         {
             e.Handled = true;
-            TimeContextMenu.PlacementTarget = CenterTimeText;
-            TimeContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            TimeContextMenu.IsOpen = true;
+            TimeInputPopup.IsOpen = true;
         }
     }
 
-    private void TimeContextMenu_Opened(object sender, RoutedEventArgs e)
+    private void TimeInputTextBox_Loaded(object sender, RoutedEventArgs e)
     {
-        if (TimeContextMenu != null)
+        if (sender is TextBox textBox)
         {
-            TimeContextMenu.Focus();
+            textBox.Focus();
+            textBox.SelectAll();
+        }
+    }
+
+    private void TimeInputTextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (sender is TextBox textBox && int.TryParse(textBox.Text, out int minutes))
+            {
+                if (minutes > 0 && minutes <= 999)
+                {
+                    _timeRemaining = TimeSpan.FromMinutes(minutes);
+                    _totalTime = TimeSpan.FromMinutes(minutes);
+                    UpdateTimerDisplay();
+                    TimeInputPopup.IsOpen = false;
+                    textBox.Text = string.Empty;
+                }
+                else
+                {
+                    MessageBox.Show("Bitte geben Sie eine Zahl zwischen 1 und 999 ein.", "Ungültige Eingabe", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bitte geben Sie eine gültige Zahl ein.", "Ungültige Eingabe", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            TimeInputPopup.IsOpen = false;
+            if (sender is TextBox textBox)
+            {
+                textBox.Text = string.Empty;
+            }
+            e.Handled = true;
         }
     }
 
@@ -241,6 +277,12 @@ public partial class MainWindow : Window
         else
         {
             _timer.Stop();
+            _isRunning = false;
+            var textBlock = FindButtonTextBlock(StartPauseButton);
+            if (textBlock != null)
+            {
+                textBlock.Text = "Beendet";
+            }
         }
     }
 
