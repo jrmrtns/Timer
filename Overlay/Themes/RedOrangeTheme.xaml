@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Farbdefinitionen: Red-Orange -->
+    <Color x:Key="PrimaryCyan">#FFFF3333</Color>
+    <Color x:Key="PrimaryCyanDark">#FFCC0000</Color>
+    <Color x:Key="PrimaryPurple">#FFFF6600</Color>
+    <Color x:Key="PrimaryPurpleDark">#FFDD4400</Color>
+
+    <Color x:Key="AccentCyan">#88FF3333</Color>
+    <Color x:Key="AccentPurple">#88FF6600</Color>
+
+    <Color x:Key="BackgroundDarkCyan">#88440000</Color>
+    <Color x:Key="BackgroundDarkPurple">#88331100</Color>
+    <Color x:Key="HoverCyan">#AA552200</Color>
+    <Color x:Key="HoverPurple">#AA441100</Color>
+    <Color x:Key="PressedCyan">#CCAA3300</Color>
+    <Color x:Key="PressedPurple">#CC882200</Color>
+
+    <Color x:Key="HighlightCyan">#66FF3333</Color>
+    <Color x:Key="HighlightPurple">#66FF6600</Color>
+
+    <!-- SolidColorBrush für Fill-Eigenschaften -->
+    <SolidColorBrush x:Key="PrimaryCyanBrush" Color="{DynamicResource PrimaryCyan}"/>
+    <SolidColorBrush x:Key="AccentCyanBrush" Color="{DynamicResource AccentCyan}"/>
+
+    <!-- Moderner Gradient für Buttons -->
+    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
+        <GradientStop Color="{DynamicResource PrimaryCyanDark}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="0"/>
+        <GradientStop Color="{DynamicResource PrimaryPurpleDark}" Offset="1"/>
+    </LinearGradientBrush>
+</ResourceDictionary>
+
