@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="MainWindow" 
         Width="240"
-        Height="300"
+        Height="240"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -60,14 +60,16 @@
                                                     Opacity="0.4"/>
                                 </Ellipse.Effect>
                             </Ellipse>
-                            <Path x:Name="CloseIcon"
-                                  Data="M12,12 L20,20 M20,12 L12,20"
-                                  Stroke="#FFFFFF"
-                                  StrokeThickness="2"
-                                  StrokeStartLineCap="Round"
-                                  StrokeEndLineCap="Round"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
+                            <Viewbox Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Canvas Width="24" Height="24">
+                                    <Path x:Name="CloseIcon"
+                                          Data="M6,6 L18,18 M18,6 L6,18"
+                                          Stroke="#FFFFFF"
+                                          StrokeThickness="2"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                </Canvas>
+                            </Viewbox>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -166,13 +168,14 @@
                 </Button.ContextMenu>
             </Button>
 
-            <!-- Moderne Clock mit Gradient -->
+            <!-- Pie Chart Progress -->
             <Grid Grid.Row="0"
                   Width="140"
                   Height="140"
                   Margin="0,5,0,0"
                   HorizontalAlignment="Center">
 
+                <!-- Background Circle -->
                 <Ellipse Width="140" Height="140">
                     <Ellipse.Fill>
                         <RadialGradientBrush>
@@ -188,116 +191,65 @@
                     </Ellipse.Effect>
                 </Ellipse>
 
+                <!-- Background Ring -->
                 <Ellipse Width="140"
                          Height="140"
-                         StrokeThickness="3">
-                    <Ellipse.Stroke>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
-                            <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="0.5"/>
-                            <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Ellipse.Stroke>
-                </Ellipse>
+                         StrokeThickness="3"
+                         Stroke="#33FFFFFF"/>
 
-                <Canvas x:Name="ClockCanvas" Width="140" Height="140">
-                    <!-- Stundenmarkierungen modern -->
-                    <Ellipse Width="6" Height="6" Canvas.Left="67" Canvas.Top="8" Fill="{DynamicResource PrimaryCyanBrush}"/>
-                    <Ellipse Width="6" Height="6" Canvas.Left="67" Canvas.Top="126" Fill="{DynamicResource PrimaryCyanBrush}"/>
-                    <Ellipse Width="6" Height="6" Canvas.Left="8" Canvas.Top="67" Fill="{DynamicResource PrimaryCyanBrush}"/>
-                    <Ellipse Width="6" Height="6" Canvas.Left="126" Canvas.Top="67" Fill="{DynamicResource PrimaryCyanBrush}"/>
-
-                    <!-- 3, 6, 9, 12 Uhr Markierungen -->
-                    <Ellipse Width="5" Height="5" Canvas.Left="116" Canvas.Top="46" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="116" Canvas.Top="89" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="24" Canvas.Top="46" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="24" Canvas.Top="89" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="46" Canvas.Top="24" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="89" Canvas.Top="24" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="46" Canvas.Top="116" Fill="{DynamicResource AccentCyanBrush}"/>
-                    <Ellipse Width="5" Height="5" Canvas.Left="89" Canvas.Top="116" Fill="{DynamicResource AccentCyanBrush}"/>
-
-                    <!-- Minutenzeiger mit Gradient -->
-                    <Line x:Name="MinuteHand"
-                          X1="70" Y1="70"
-                          X2="70" Y2="25"
-                          StrokeThickness="4"
-                          StrokeEndLineCap="Round"
-                          RenderTransformOrigin="0,0">
-                        <Line.Stroke>
-                            <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                <GradientStop Color="#FFFFFF" Offset="0"/>
-                                <GradientStop Color="#FFAAAAAA" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Line.Stroke>
-                        <Line.Effect>
-                            <DropShadowEffect Color="#FFFFFF" BlurRadius="8" ShadowDepth="0" Opacity="0.5"/>
-                        </Line.Effect>
-                        <Line.RenderTransform>
-                            <RotateTransform x:Name="MinuteRotation" CenterX="70" CenterY="70" Angle="0"/>
-                        </Line.RenderTransform>
-                    </Line>
-
-                    <!-- Sekundenzeiger mit Gradient -->
-                    <Line x:Name="SecondHand"
-                          X1="70" Y1="70"
-                          X2="70" Y2="15"
-                          StrokeThickness="2.5"
-                          StrokeEndLineCap="Round"
-                          RenderTransformOrigin="0,0">
-                        <Line.Stroke>
-                            <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                <!-- Progress Pie Chart -->
+                <Canvas x:Name="PieCanvas" Width="140" Height="140">
+                    <Path x:Name="ProgressPie"
+                          StrokeThickness="0">
+                        <Path.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
                                 <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
                             </LinearGradientBrush>
-                        </Line.Stroke>
-                        <Line.Effect>
-                            <DropShadowEffect Color="{DynamicResource PrimaryCyan}" BlurRadius="10" ShadowDepth="0" Opacity="0.7"/>
-                        </Line.Effect>
-                        <Line.RenderTransform>
-                            <RotateTransform x:Name="SecondRotation" CenterX="70" CenterY="70" Angle="0"/>
-                        </Line.RenderTransform>
-                    </Line>
-
-                    <!-- Mittelpunkt mit Glow -->
-                    <Ellipse Width="10"
-                             Height="10"
-                             Canvas.Left="65"
-                             Canvas.Top="65"
-                             Fill="#FFFFFF">
-                        <Ellipse.Effect>
-                            <DropShadowEffect Color="{DynamicResource PrimaryCyan}" BlurRadius="12" ShadowDepth="0" Opacity="0.8"/>
-                        </Ellipse.Effect>
-                    </Ellipse>
+                        </Path.Fill>
+                        <Path.Effect>
+                            <DropShadowEffect Color="{DynamicResource PrimaryCyan}" 
+                                            BlurRadius="10" 
+                                            ShadowDepth="0" 
+                                            Opacity="0.6"/>
+                        </Path.Effect>
+                    </Path>
                 </Canvas>
-            </Grid>
 
-            <!-- Moderne Zeitanzeige -->
-            <Border Grid.Row="1"
-                    Margin="0,8,0,0"
-                    HorizontalAlignment="Center"
-                    Background="#66000000"
-                    BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="12,6">
-                <Border.BorderBrush>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
-                        <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.BorderBrush>
-                <TextBlock x:Name="TimeRemainingText"
+                <!-- Center Circle -->
+                <Ellipse Width="100"
+                         Height="100"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#66000000" Offset="0"/>
+                            <GradientStop Color="#33000000" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <!-- Time Remaining Text -->
+                <TextBlock x:Name="CenterTimeText"
                            Text="10:00"
-                           FontSize="24"
+                           FontSize="32"
                            FontWeight="Bold"
                            Cursor="Hand"
-                           MouseLeftButtonDown="TimeRemainingText_MouseLeftButtonDown">
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           MouseLeftButtonDown="CenterTimeText_MouseLeftButtonDown">
                     <TextBlock.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                             <GradientStop Color="{DynamicResource PrimaryCyan}" Offset="0"/>
                             <GradientStop Color="{DynamicResource PrimaryPurple}" Offset="1"/>
                         </LinearGradientBrush>
                     </TextBlock.Foreground>
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="{DynamicResource PrimaryCyan}" 
+                                        BlurRadius="8" 
+                                        ShadowDepth="0" 
+                                        Opacity="0.6"/>
+                    </TextBlock.Effect>
                     <TextBlock.ContextMenu>
                         <ContextMenu x:Name="TimeContextMenu"
                                      Background="#E5000000"
@@ -341,13 +293,13 @@
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>
-            </Border>
+            </Grid>
 
             <!-- Moderner Start/Pause Button -->
             <Button x:Name="StartPauseButton"
                     Grid.Row="2"
                     HorizontalAlignment="Center"
-                    Margin="0,8,0,0"
+                    Margin="0,18,0,0"
                     Width="100"
                     Height="36"
                     Click="StartPause_Click"

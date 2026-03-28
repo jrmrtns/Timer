@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Overlay;
@@ -14,6 +16,7 @@ public partial class MainWindow : Window
     private bool _clickThroughEnabled;
     private DispatcherTimer _timer;
     private TimeSpan _timeRemaining;
+    private TimeSpan _totalTime;
     private bool _isRunning;
 
     private const int GWL_EXSTYLE = -20;
@@ -25,6 +28,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _timeRemaining = TimeSpan.FromMinutes(10);
+        _totalTime = TimeSpan.FromMinutes(10);
         _isRunning = false;
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(1);
@@ -90,12 +94,12 @@ public partial class MainWindow : Window
         }
     }
 
-    private void TimeRemainingText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void CenterTimeText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (!_isRunning)
         {
             e.Handled = true;
-            TimeContextMenu.PlacementTarget = TimeRemainingText;
+            TimeContextMenu.PlacementTarget = CenterTimeText;
             TimeContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
             TimeContextMenu.IsOpen = true;
         }
@@ -159,6 +163,7 @@ public partial class MainWindow : Window
             if (int.TryParse(tagString, out int minutes))
             {
                 _timeRemaining = TimeSpan.FromMinutes(minutes);
+                _totalTime = TimeSpan.FromMinutes(minutes);
                 UpdateTimerDisplay();
             }
         }
@@ -241,16 +246,60 @@ public partial class MainWindow : Window
 
     private void UpdateTimerDisplay()
     {
-        double totalSeconds = _timeRemaining.TotalSeconds;
-        double totalMinutes = totalSeconds / 60.0;
+        double percentage = _totalTime.TotalSeconds > 0 
+            ? (_timeRemaining.TotalSeconds / _totalTime.TotalSeconds) * 100 
+            : 0;
 
-        double minuteAngle = (10 - totalMinutes) * 36.0;
-        double secondAngle = (60 - _timeRemaining.Seconds) * 6.0;
+        UpdatePieChart(percentage);
 
-        MinuteRotation.Angle = minuteAngle;
-        SecondRotation.Angle = secondAngle;
+        CenterTimeText.Text = $"{(int)_timeRemaining.TotalMinutes:D2}:{_timeRemaining.Seconds:D2}";
+    }
 
-        TimeRemainingText.Text = $"{(int)_timeRemaining.TotalMinutes:D2}:{_timeRemaining.Seconds:D2}";
+    private void UpdatePieChart(double percentage)
+    {
+        double radius = 70;
+        double centerX = 70;
+        double centerY = 70;
+
+        if (percentage <= 0)
+        {
+            ProgressPie.Data = Geometry.Empty;
+            return;
+        }
+
+        if (percentage >= 100)
+        {
+            ProgressPie.Data = new EllipseGeometry(new Point(centerX, centerY), radius, radius);
+            return;
+        }
+
+        double missingAngle = ((100 - percentage) / 100.0) * 360.0;
+        double startRadians = (-90 + missingAngle) * Math.PI / 180.0;
+
+        double startX = centerX + radius * Math.Cos(startRadians);
+        double startY = centerY + radius * Math.Sin(startRadians);
+
+        bool isLargeArc = percentage > 50;
+
+        var figure = new PathFigure
+        {
+            StartPoint = new Point(centerX, centerY),
+            IsClosed = true
+        };
+
+        figure.Segments.Add(new LineSegment(new Point(startX, startY), true));
+        figure.Segments.Add(new ArcSegment(
+            new Point(centerX, centerY - radius),
+            new Size(radius, radius),
+            0,
+            isLargeArc,
+            SweepDirection.Clockwise,
+            true));
+
+        var geometry = new PathGeometry();
+        geometry.Figures.Add(figure);
+
+        ProgressPie.Data = geometry;
     }
 
     private static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex)
